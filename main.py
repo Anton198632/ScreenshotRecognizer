@@ -5,14 +5,13 @@ import win32gui
 import win32ui
 from PIL import Image, ImageGrab, ImageTk
 import tkinter as tk
-
+import pyperclip
 
 def recognize_text(im):
     pytesseract.pytesseract.tesseract_cmd = r'c:\Program Files\Tesseract-OCR\tesseract'
     recognize_t = pytesseract.image_to_string(im, lang='rus+eng')
     print(recognize_t)
     return recognize_t
-
 
 def create_bitmap_for_save(x, y, width, height):
     # захватите ручку главного окна рабочего стола
@@ -89,10 +88,10 @@ class GUI(tk.Tk):
 
 if __name__ == '__main__':
 
-    print('Для выделения области распознания нажмите "s"')
+    print('Для выделения области распознания нажмите "Alt + S"')
 
     while True:
-        if keyboard.is_pressed('s'):
+        if keyboard.is_pressed('alt+s'):
             root = GUI()
             root.mainloop()
             selected_area = root.get_selected_area()
@@ -104,6 +103,8 @@ if __name__ == '__main__':
             # распознаем текст
             r_text = recognize_text(img)
             r_text = r_text.replace("\n", "\t")
+
+            pyperclip.copy(r_text)
 
             # записывеаем результат в файл
             with open('result.txt', 'a') as f:
